@@ -1,0 +1,130 @@
+<html>
+    <head>
+        <title>Car race</title>
+        <style>
+            #container 
+            {
+                width:400px;
+            }
+            #car1
+            {
+                background-color:red;
+                position:relative;
+                width:90px;
+                height:50px;
+                border:none;
+                border-radius: 5px;
+            }
+            #car2
+            {
+                background-color:green;
+                position:relative;
+                width:90px;
+                height:50px;
+                border:none;
+                border-radius: 5px;
+            } 
+            #road 
+            {
+
+                padding:10px;
+                background-color:#484848;
+            }
+            #separator 
+            {
+                height:10px;
+                background-color:#222;
+                margin-top:10px;
+                margin-bottom:10px;
+            }
+            #controls
+            {
+                padding:10px;
+                text-align:center;
+                background: #ccc;
+            }
+            input 
+            {
+                width:50px;
+            }
+            #start:hover,#stop:hover{
+                background:white;
+                color:black;
+                border:1px double black;
+                transition: 0.6s ease;
+                transform:rotateY(360deg);
+            }
+            #start, #stop{
+                background:#333;
+                border-radius:5px;
+                padding:10px;
+                border:none;
+                color:white;
+            }
+            #start:not(:hover),
+            #stop:not(:hover){
+                background:#333;
+                border-radius:5px;
+                padding:10px;
+                border:none;
+                color:white;
+                transition: 0.6s ease;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <div id="road">
+                <div id="car1"></div>
+                <div id="separator"></div>
+                <div id="car2"></div>
+            </div>
+            <div id="controls">
+                <label>Car 1 Speed(px/sec):</label>
+                <input type="number" id="speed1" value="100"/><br/><br/>
+                <label>Car 2 Speed(px/sec):</label>
+                <input type="number" id="speed2" value="80" /><br/><br/>
+                <button id="start" onclick="start()">Start</button>
+                <button id="stop"  onclick="stop()" >Stop </button>
+            </div>
+        </div>
+        <script>
+            var interval = [];
+
+            function initMovement(car,speed) {
+                var carObj = document.getElementById(car);
+                var left = 0;
+                interval[car] = setInterval(function(){
+                    left =left + speed/100;
+                    carObj.style.left = left+'px';
+                    if (left>=300) {//finish
+                        for(var i in interval){
+                            clearInterval(interval[i]);
+                        }
+                        document.getElementById("start").disabled = false;
+
+                        document.getElementById("stop").disabled = true;
+                    }
+                },10);
+            }
+
+            function start() {
+                var speed1 = document.getElementById("speed1").value;
+                var speed2 = document.getElementById("speed2").value;
+                initMovement("car1",speed1);
+                initMovement("car2",speed2);
+
+                document.getElementById("start").disabled = true;
+                document.getElementById("stop").disabled = false;    
+            }
+
+            function stop() {
+                for(var i in interval){
+                    clearInterval(interval[i]);
+                }
+                document.getElementById("start").disabled = false;
+                document.getElementById("stop").disabled = true;
+            }
+        </script>
+    </body>
+</html>
